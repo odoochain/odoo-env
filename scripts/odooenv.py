@@ -555,7 +555,7 @@ class OdooEnv(object):
         if self.debug:
             command += self._add_debug_mountings(self.client.numeric_ver)
 
-        command += '--link pg-{}:db '.format(self.client.name)
+        command += '--link postgres:db '.format(self.client.name)
 
         if not (self.debug or write_config):
             command += '--restart=always '

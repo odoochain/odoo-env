@@ -55,10 +55,6 @@ class Repo2(object):
         self._branch = branch
 
     @property
-    def name(self):
-        return self._dict.get('repo')
-
-    @property
     def dir_name(self):
         """ Obtener el directorio donde se pone el repo
         """

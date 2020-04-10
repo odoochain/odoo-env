@@ -1,0 +1,43 @@
+Backup
+~~~~~~
+
+oe backup 
+
+    Genera un backup de la base de datos por defecto y lo pone en el directorio de bases de 
+    dato por defecto. El backup es siempre completo (dump+filestore)
+
+Restore 
+~~~~~~~
+
+oe restore [-f bkp_name] | [prod [-f bkp_name]] [force]
+
+
+oe restore
+
+    Restaura el ultimo backup del directorio por defecto y lo pone en la base de datos por defecto
+
+oe restore -f bkp_name
+
+    Restaura el backup que se llama bkp_name del directorio por defecto y lo pone en la base de 
+    datos por defecto
+
+oe restore prod
+
+    Baja el ultimo backup del directorio de backups por defecto que esta en el vps de produccion al
+    directorio de backup local, lo restaura a la base de datos por defecto y desactiva la base.
+
+oe restore prod force
+
+    Fuerza a hacer un backup en el vps de produccion, Lo baja al directorio de backup local, 
+    lo restaura a la base de datos por defecto y desactiva la base.
+
+oe restore prod no-deactivate
+
+    Baja el ultimo backup del directorio de backups por defecto que esta en el vps de produccion al
+    directorio de backup local, lo restaura a la base de datos por defecto y desactiva la base.
+
+oe restore prod -f bkp_name
+
+    Baja el backup de nombre bkp_name del directorio de backups por defecto que esta en el vps de 
+    produccion al directorio de backup local, lo restaura a la base de datos por defecto y 
+    desactiva la base.

@@ -1,17 +1,18 @@
 """Hola."""
 
 import click
-import sys
+import os
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h'])
 
-@click.group(context_settings=CONTEXT_SETTINGS)
 
+@click.group(context_settings=CONTEXT_SETTINGS)
 @click.option('-v', is_flag=True, help='verbose')
 def cli(v):
     """v0.10.2 by jeo Software <jorge.obiols@gmail.com>."""
 
 # RESTART ----------------------------------------------------------------------------
+
 
 @cli.command('restart')
 def restart():
@@ -20,6 +21,7 @@ def restart():
 
 # CONFIG ------------------------------------------------------------------------------
 
+
 @cli.command('config')
 def config():
     """Validate and view system configuration."""
@@ -27,12 +29,14 @@ def config():
 
 # IMAGES ------------------------------------------------------------------------------
 
+
 @cli.command('images')
 def images():
     """List images."""
     click.echo('listing images')
 
 # PS ----------------------------------------------------------------------------------
+
 
 @cli.command('ps')
 @click.option('-a', is_flag=True, help="Show all containers")
@@ -45,6 +49,7 @@ def ps(a):
 
 # GROUP -------------------------------------------------------------------------------
 
+
 @cli.command('pull')
 def pull():
     """Pull service images."""
@@ -52,12 +57,14 @@ def pull():
 
 # VERSION -----------------------------------------------------------------------------
 
+
 @cli.command('version')
 def version():
     """Show version information."""
     click.echo('version 111111')
 
 # UP ---------------------------------------------------------------------------------
+
 
 @cli.command("up")
 @click.option('-c', help='client name')
@@ -76,12 +83,14 @@ def pgadmin():
 
 # INSTALL----------------------------------------------------------------------------------
 
+
 @cli.command('install')
 def install():
     """Install Environment."""
     click.echo('installing...')
 
 # HELP-----------------------------------------------------------------------------------
+
 
 @cli.group('help')
 def help():
@@ -90,7 +99,8 @@ def help():
 
 def _show_help(command):
     try:
-        with open('doc/%s.hlp' % command, 'r') as f:
+        data_dir = os.path.join(os.path.dirname(__file__))
+        with open(data_dir + '/doc/%s.hlp' % command, 'r') as f:
             help = f.read()
         click.echo_via_pager(help)
     except FileNotFoundError as e:

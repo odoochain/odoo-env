@@ -105,7 +105,7 @@ class OdooEnv(object):
         return ret
 
     def restore(self, client_name, database=False, backup_file=False,
-        deactivate=False):
+                deactivate=False):
         """ Restaurar un backup desde el directorio backup_dir
         """
 

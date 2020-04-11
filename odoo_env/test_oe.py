@@ -624,7 +624,7 @@ class TestRepository(unittest.TestCase):
         self.assertEqual(cmds[0].command, command)
 
         user = getpass.getuser()
-        command = 'sudo chown %s:%s /odoo_ar/' % (user,user)
+        command = 'sudo chown %s:%s /odoo_ar/' % (user, user)
         self.assertEqual(cmds[1].command, command)
 
         command = 'mkdir -p /odoo_ar/odoo-9.0/test_client/postgresql'

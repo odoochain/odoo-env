@@ -252,7 +252,6 @@ Odoo Environment Manager v%s - by jeo Software <jorge.obiols@gmail.com>
     conf = OeConfig()
     conf.check_version()
 
-
     # #####################################################################
     # ejecutar comandos
     # ######################################################################

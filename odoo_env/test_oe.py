@@ -19,8 +19,9 @@ class TestRepository(unittest.TestCase):
         conf._test = True
 
     def test_install(self):
-        """ ################################################# TEST INSTALLATION
+        """################################################# TEST INSTALLATION
         """
+
         options = {
             'debug': False,
             'no-repos': False,
@@ -202,7 +203,7 @@ class TestRepository(unittest.TestCase):
             cmds[0].usr_msg, 'Installing client test2_client')
 
         self.assertEqual(
-            cmds[2].args, '{}odoo-9.0/test2_client/postgresql'.format(base_dir))
+            cmds[2].args, '%sodoo-9.0/test2_client/postgresql' % base_dir)
         self.assertEqual(
             cmds[2].command,
             'mkdir -p {}odoo-9.0/test2_client/postgresql'.format(base_dir))
@@ -218,8 +219,6 @@ class TestRepository(unittest.TestCase):
 
         self.assertEqual(
             cmds[4].args, '/odoo_ar/odoo-9.0/test2_client/data_dir')
-        self.assertEqual(
-            cmds[4].command, 'mkdir -p /odoo_ar/odoo-9.0/test2_client/data_dir')
         self.assertEqual(
             cmds[4].usr_msg, False)
 
@@ -256,7 +255,8 @@ class TestRepository(unittest.TestCase):
         self.assertEqual(
             cmds[9].args, False)
         self.assertEqual(
-            cmds[9].command, 'chmod o+w /odoo_ar/odoo-9.0/test2_client/data_dir'
+            cmds[9].command, 'chmod o+w /odoo_ar/odoo-9.0/'
+            'test2_client/data_dir'
         )
         self.assertEqual(
             cmds[9].usr_msg, False)
@@ -332,20 +332,24 @@ class TestRepository(unittest.TestCase):
         self.assertEqual(
             cmds[18].command,
             'git -C /odoo_ar/odoo-9.0/test2_client/sources/ clone --depth 1 '
-            '-b 9.0 https://github.com/ingadhoc/odoo-argentina.git adhoc-odoo-argentina')
+            '-b 9.0 https://github.com/ingadhoc/odoo-argentina.git '
+            'adhoc-odoo-argentina')
         self.assertEqual(
             cmds[18].usr_msg,
-            'cloning b 9.0     https://github.com/ingadhoc/odoo-argentina.git adhoc-odoo-argentina')
+            'cloning b 9.0     https://github.com/ingadhoc/odoo-argentina.git'
+            ' adhoc-odoo-argentina')
 
         self.assertEqual(
             cmds[19].args,
             '/odoo_ar/odoo-9.0/test2_client/sources/adhoc-odoo-argentina')
         self.assertEqual(
             cmds[19].command,
-            'git -C /odoo_ar/odoo-9.0/test2_client/sources/adhoc-odoo-argentina pull')
+            'git -C /odoo_ar/odoo-9.0/test2_client/sources/'
+            'adhoc-odoo-argentina pull')
         self.assertEqual(
             cmds[19].usr_msg,
-            'pulling b 9.0     https://github.com/ingadhoc/odoo-argentina.git adhoc-odoo-argentina')
+            'pulling b 9.0     https://github.com/ingadhoc/odoo-argentina.git'
+            ' adhoc-odoo-argentina')
 
     def test_install2_enterprise(self):
         """ ################################### TEST INSTALLATION v2 ENTERPRISE
@@ -367,10 +371,10 @@ class TestRepository(unittest.TestCase):
             cmds[0].usr_msg, 'Installing client test2e_client')
 
         self.assertEqual(
-            cmds[2].args, '{}odoo-9.0e/test2e_client/postgresql'.format(base_dir))
+            cmds[2].args, '%sodoo-9.0e/test2e_client/postgresql' % base_dir)
         self.assertEqual(
             cmds[2].command,
-            'mkdir -p {}odoo-9.0e/test2e_client/postgresql'.format(base_dir))
+            'mkdir -p %sodoo-9.0e/test2e_client/postgresql' % base_dir)
         self.assertEqual(
             cmds[2].usr_msg, False)
 
@@ -618,8 +622,8 @@ class TestRepository(unittest.TestCase):
         command = 'sudo mkdir /odoo_ar/'
         self.assertEqual(cmds[0].command, command)
 
-        #command = 'sudo chown jobiols:jobiols /odoo_ar/'
-        #self.assertEqual(cmds[1].command, command)
+        command = 'sudo chown jobiols:jobiols /odoo_ar/'
+        self.assertEqual(cmds[1].command, command)
 
         command = 'mkdir -p /odoo_ar/odoo-9.0/test_client/postgresql'
         self.assertEqual(cmds[2].command, command)
@@ -789,20 +793,26 @@ class TestRepository(unittest.TestCase):
 
     def test_repo_clone(self):
         repo = Repo({'usr': 'jobiols', 'repo': 'project', 'branch': '9.0'})
-        self.assertEqual(repo.clone, 'clone --depth 1 -b 9.0 https://github.com/jobiols/project')
+        self.assertEqual(
+            repo.clone, 'clone --depth 1 -b 9.0 '
+            'https://github.com/jobiols/project')
 
     def test_repo2_clone(self):
         repo = Repo2('https://github.com/jobiols/project.git', '9.0')
-        self.assertEqual(repo.clone, 'clone --depth 1 -b 9.0 https://github.com/jobiols/project.git')
+        self.assertEqual(
+            repo.clone, 'clone --depth 1 -b 9.0 '
+            'https://github.com/jobiols/project.git')
         self.assertEqual(repo.pull, 'pull')
         self.assertEqual(repo.dir_name, 'project')
 
     def test_repo2_clone_dir(self):
-        repo = Repo2('https://github.com/jobiols/project.git adhoc-project', '9.0')
+        repo = Repo2(
+            'https://github.com/jobiols/project.git adhoc-project', '9.0')
         self.assertEqual(repo.dir_name, 'adhoc-project')
 
     def test_image(self):
-        image = Image({'name': 'odoo', 'usr': 'jobiols', 'img': 'odoo-jeo', 'ver': '9.0'})
+        image = Image({'name': 'odoo', 'usr': 'jobiols',
+                       'img': 'odoo-jeo', 'ver': '9.0'})
         self.assertEqual(image.name, 'jobiols/odoo-jeo:9.0')
         self.assertEqual(image.version, '9.0')
         self.assertEqual(image.short_name, 'odoo')
@@ -812,3 +822,13 @@ class TestRepository(unittest.TestCase):
         self.assertEqual(image.name, 'jobiols/odoo-jeo:9.0')
         self.assertEqual(image.version, '9.0')
         self.assertEqual(image.short_name, 'odoo')
+
+    def test_data_files(self):
+        """Verificar que los archivos se instalan"""
+        import os
+        data_dir = os.path.join(os.path.dirname(__file__))
+
+        with open(data_dir + '/doc/nginx.conf') as f:
+            nginx = f.readlines()
+
+        self.assertEqual(nginx[0], '# Nginx para Odoo v1.0\n')

@@ -22,15 +22,13 @@ setuptools.setup(
             'sd=odoo_env.sd:main'
         ],
     },
-    install_requires=['PyYAML', 'six', 'tornado','click'],
-    # TODO Esto no funciona en gentoo, no pone el archivo en /usr/local
-    data_files=[('', ['odoo_env/data/nginx.conf', 'odoo_env/doc'])],
+    install_requires=['PyYAML', 'six', 'tornado', 'click'],
     packages=setuptools.find_packages(),
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
-#        "Programming Language :: Python :: 3.4",
+        "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
@@ -41,3 +39,10 @@ setuptools.setup(
     ],
     keywords="odoo docker environment",
 )
+
+
+"""
+data_files=[(r'~/.config/oe/doc',
+                ['odoo_env/data/nginx.conf',
+                'odoo_env/doc/backup.hlp'])],
+"""

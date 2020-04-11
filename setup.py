@@ -22,9 +22,9 @@ setuptools.setup(
             'sd=odoo_env.sd:main'
         ],
     },
-    install_requires=['PyYAML', 'six', 'tornado'],
+    install_requires=['PyYAML', 'six', 'tornado','click'],
     # TODO Esto no funciona en gentoo, no pone el archivo en /usr/local
-    data_files=[('', ['odoo_env/data/nginx.conf'])],
+    data_files=[('', ['odoo_env/data/nginx.conf', 'odoo_env/doc'])],
     packages=setuptools.find_packages(),
     classifiers=[
         "Development Status :: 5 - Production/Stable",

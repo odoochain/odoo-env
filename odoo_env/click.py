@@ -11,7 +11,7 @@ CONTEXT_SETTINGS = dict(help_option_names=['-h'])
 def cli(v):
     """v0.10.2 by jeo Software <jorge.obiols@gmail.com>."""
 
-# RESTART ----------------------------------------------------------------------------
+# RESTART ---------------------------------------------------------------------
 
 
 @cli.command('restart')
@@ -19,7 +19,7 @@ def restart():
     """Restart Services."""
     click.echo('Restarting services')
 
-# CONFIG ------------------------------------------------------------------------------
+# CONFIG ----------------------------------------------------------------------
 
 
 @cli.command('config')
@@ -27,7 +27,7 @@ def config():
     """Validate and view system configuration."""
     click.echo('listing config')
 
-# IMAGES ------------------------------------------------------------------------------
+# IMAGES ----------------------------------------------------------------------
 
 
 @cli.command('images')
@@ -35,7 +35,7 @@ def images():
     """List images."""
     click.echo('listing images')
 
-# PS ----------------------------------------------------------------------------------
+# PS --------------------------------------------------------------------------
 
 
 @cli.command('ps')
@@ -47,7 +47,7 @@ def ps(a):
     else:
         click.echo('List running containers')
 
-# GROUP -------------------------------------------------------------------------------
+# GROUP -----------------------------------------------------------------------
 
 
 @cli.command('pull')
@@ -55,7 +55,7 @@ def pull():
     """Pull service images."""
     click.echo('Pulling images...')
 
-# VERSION -----------------------------------------------------------------------------
+# VERSION ---------------------------------------------------------------------
 
 
 @cli.command('version')
@@ -63,7 +63,7 @@ def version():
     """Show version information."""
     click.echo('version 111111')
 
-# UP ---------------------------------------------------------------------------------
+# UP --------------------------------------------------------------------------
 
 
 @cli.command("up")
@@ -74,14 +74,14 @@ def up(c, d, e):
     """Create and start containers."""
 
 
-# PGADMIN ---------------------------------------------------------------------------------
+# PGADMIN ---------------------------------------------------------------------
 
 @cli.command('pgadmin')
 def pgadmin():
     """Start pgadmin."""
     click.echo('starting pgadmin')
 
-# INSTALL----------------------------------------------------------------------------------
+# INSTALL----------------------------------------------------------------------
 
 
 @cli.command('install')
@@ -89,7 +89,7 @@ def install():
     """Install Environment."""
     click.echo('installing...')
 
-# HELP-----------------------------------------------------------------------------------
+# HELP-------------------------------------------------------------------------
 
 
 @cli.group('help')
@@ -136,7 +136,7 @@ def _help_restore():
 def _help_config():
     _show_help('config')
 
-# DOWN ----------------------------------------------------------------------------------
+# DOWN ------------------------------------------------------------------------
 
 
 @cli.command("down")
@@ -144,7 +144,7 @@ def down():
     """Stop and remove containers, networks, images, and volumes."""
     click.echo('System is going down...')
 
-# DATABASE -----------------------------------------------------------------------
+# DATABASE --------------------------------------------------------------------
 
 
 @cli.group('db')
@@ -163,8 +163,10 @@ def _backup_database(c, d, e):
 
 @db.command('restore')
 @click.option('-f', help='File to restore / latest file if ommited.')
-@click.option('--prod', is_flag=True, help='Restore from production / local if ommited.')
-@click.option('--no-deactivate', is_flag=True, help='Do not deactivate database.')
+@click.option('--prod', is_flag=True,
+              help='Restore from production / local if ommited.')
+@click.option('--no-deactivate', is_flag=True,
+              help='Do not deactivate database.')
 def _restore_database(f, prod, no_deactivate):
     """Restore backup from default location / production location."""
     click.echo('Restoring database from local...')

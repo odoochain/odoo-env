@@ -3,7 +3,7 @@
 import click
 import os
 
-from odoo_env.odooenv import OdooEnv
+from odoo_env.odooenv import OdooEnv, OdooEnv_
 from odoo_env.messages import Msg
 from odoo_env.options import get_param
 from odoo_env.__init__ import __version__
@@ -32,7 +32,7 @@ def restart():
 @cli.command('config')
 def config():
     """Validate and view system configuration."""
-    click.echo('listing config')
+    OdooEnv_()._config()
 
 # IMAGES ------------------------------------------------------------------
 
@@ -184,17 +184,8 @@ def _restore_database(f, prod, no_deactivate):
               help='List from production / local if ommited.')
 def _list_database(prod):
     """List backup files from default location / production location."""
-    click.echo('Listing Restoring database from local...')
-    options = {
-        'verbose': False,
-        'debug': False,
-        'no-repos': False,
-        'nginx': False,
-        'backup_file': 'args.backup_file',
-    }
+    OdooEnv_()._list_database(prod=False)
 
-    client_name = get_param('args', 'client')
-    command = OdooEnv(options).backup_list(client_name)
-    if command and command.check():
-        Msg().inf(command.usr_msg)
-        command.execute()
+
+if __name__ == "__main__":
+    cli()

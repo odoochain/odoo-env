@@ -5,13 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Módulo",
+            "name": "Python: oe.py",
             "type": "python",
             "request": "launch",
-            "module": "oe",
-            "env" : {"PYTHONPATH": "${workspaceFolder}"},
+            "program": "/home/jobiols/git-repos/odoo-env/odoo_env/oe.py",
             "console": "integratedTerminal",
-            "args": ["db"]
+            "stopOnEntry": false,
+            "args": ["db","list"]
         }
     ]
 }

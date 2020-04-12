@@ -7,8 +7,44 @@ from odoo_env.command import Command, MakedirCommand, \
 from odoo_env.constants import BASE_DIR, IN_CONFIG, IN_DATA, IN_LOG, \
     IN_CUSTOM_ADDONS, IN_DIST_PACKAGES, IN_EXTRA_ADDONS, IN_BACKUP_DIR, \
     IN_DIST_LOCAL_PACKAGES
+from odoo_env.config import OeConfig
 import pwd
 import os
+from odoo_env.messages import Msg
+msg = Msg()
+
+
+class OdooEnv_(object):
+    def _list_database(self, prod=False):
+        client = OeConfig().get_client_object()
+        if not client:
+            msg.err('must define a client, see "oe config"')
+            
+        msg.inf('List of available backups for client %s\n\n' % client)
+
+        filenames = []
+        # walk the backup dir
+        for root, dirs, files in os.walk(self.client.backup_dir):
+            for filedesc in files:
+                filename, file_extension = os.path.splitext(filedesc)
+                if file_extension == '.zip':
+                    filenames.append(filedesc)
+
+        if len(filenames):
+            filenames.sort()
+            msg = 'List of available backups for client {} \n\n'.format(
+                client_name)
+            for filedesc in filenames:
+                msg += filedesc + '\n'
+        else:
+            msg = 'There are no files to restore'
+
+    def _config(self):
+        """ mostrar la configuracion.
+        """
+        data = OeConfig().get_config_data()
+        msg.inf('oe configuration data')
+        print(data)
 
 
 class OdooEnv(object):

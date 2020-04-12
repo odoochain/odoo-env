@@ -11,6 +11,7 @@ import tornado.websocket
 import json
 from odoo_env.__init__ import __version__
 from odoo_env.messages import Msg
+from odoo_env.client import Client
 
 USER_CONFIG_PATH = os.path.expanduser('~') + '/.config/oe/'
 USER_CONFIG_FILE = USER_CONFIG_PATH + 'oe_config.yaml'
@@ -54,7 +55,7 @@ class OeConfig(Singleton):
 
     def save_config_data(self, config):
         """ Salvar el conjunto de paths a los clientes
-        """""
+        """
         config_file = USER_CONFIG_FILE if not self._test \
             else USER_CONFIG_FILE_TEST
 
@@ -95,6 +96,10 @@ class OeConfig(Singleton):
         config = self.get_config_data()
         return config.get('client', False)
 
+    def get_client_object(self):
+        client_name = self.get_client()
+        return Client(self, False, client_name)    
+    
     def save_client(self, client):
         config = self.get_config_data()
         config['client'] = client

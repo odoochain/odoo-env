@@ -18,31 +18,27 @@ setuptools.setup(
     python_requires='>3.4',
     entry_points={
         'console_scripts': [
-            'oe=odoo_env.oe:main',
+            'oe=odoo_env.oe:cli',
             'sd=odoo_env.sd:main'
         ],
     },
     install_requires=['PyYAML', 'six', 'tornado', 'click'],
     packages=setuptools.find_packages(),
     classifiers=[
-        "Development Status :: 5 - Production/Stable",
+        "Development Status :: 4 - Beta",
+        "Environment :: Console",
         "Intended Audience :: Developers",
+        "Framework :: Odoo",
         "License :: OSI Approved :: MIT License",
+        "Natural Language :: English",
         "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
-        "Operating System :: OS Independent",
+        "Operating System :: POSIX :: Linux",
         "Topic :: Software Development :: Testing :: Unit",
         "Topic :: System :: Software Distribution",
     ],
     keywords="odoo docker environment",
 )
-
-
-"""
-data_files=[(r'~/.config/oe/doc',
-                ['odoo_env/data/nginx.conf',
-                'odoo_env/doc/backup.hlp'])],
-"""

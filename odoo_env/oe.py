@@ -1,5 +1,8 @@
-#!/usr/bin/env python
-import argparse
+"""Hola."""
+
+import click
+import os
+
 from odoo_env.odooenv import OdooEnv
 from odoo_env.messages import Msg
 from odoo_env.options import get_param
@@ -7,259 +10,191 @@ from odoo_env.__init__ import __version__
 from odoo_env.config import OeConfig
 
 
-def main():
-    parser = argparse.ArgumentParser(description="""
-==========================================================================
-Odoo Environment Manager v%s - by jeo Software <jorge.obiols@gmail.com>
-==========================================================================
-""" % __version__)
+CONTEXT_SETTINGS = dict(help_option_names=['-h'])
 
-    parser.add_argument(
-        '-i',
-        '--install',
-        action='store_true',
-        help="Install. Creates dir structure, and pull all the repositories "
-             "declared in the client manifest. Use with --debug to copy Odoo "
-             "image sources to host")
 
-    parser.add_argument(
-        '-p',
-        '--pull-images',
-        action='store_true',
-        help="Pull Images. Download all images declared in client manifest.")
+@click.group(context_settings=CONTEXT_SETTINGS)
+@click.option('-v', is_flag=True, help='verbose')
+def cli(v):
+    """Odoo Environment by jeo Software <jorge.obiols@gmail.com>."""
 
-    parser.add_argument(
-        '-w', '--write-config',
-        action='store_true',
-        help="Create / Overwrite config file.")
+# RESTART -----------------------------------------------------------------
 
-    parser.add_argument(
-        '-R', '--run-env',
-        action='store_true',
-        help="Run postgres and aeroo images.")
 
-    parser.add_argument(
-        '-r', '--run-cli',
-        action='store_true',
-        help="Run odoo image")
+@cli.command('restart')
+def restart():
+    """Restart Services."""
+    click.echo('Restarting services')
 
-    parser.add_argument(
-        '-S', '--stop-env',
-        action='store_true',
-        help="Stop postgres and aeroo images.")
+# CONFIG ------------------------------------------------------------------
 
-    parser.add_argument(
-        '-s', '--stop-cli',
-        action='store_true',
-        help="Stop odoo image.")
 
-    parser.add_argument(
-        '-u', '--update',
-        action='store_true',
-        help="Update modules to database. Use --debug to force update with "
-             "image sources. use -m modulename to update this only module "
-             "default is all use -d databasename to update this database, "
-             "default is clientname_default")
+@cli.command('config')
+def config():
+    """Validate and view system configuration."""
+    click.echo('listing config')
 
-    parser.add_argument(
-        '-c',
-        action='append',
-        dest='client',
-        help="Set default client name. This option is persistent")
+# IMAGES ------------------------------------------------------------------
 
-    parser.add_argument(
-        '-v', '--verbose',
-        action='store_true',
-        help="Go verbose mode. Prints every command")
 
-    parser.add_argument(
-        '--deactivate',
-        action='store_true',
-        help="Deactivate database before restore")
+@cli.command('images')
+def images():
+    """List images."""
+    click.echo('listing images')
 
-    parser.add_argument(
-        '--debug',
-        action='store_true',
-        help='Set default environment mode to debug'
-             'This option has the following efects: '
-             '1.- When doing an install it copies the image sources to host '
-             'and clones repos with depth=100'
-             '2.- When doing an update all, (option -u) it forces update with '
-             'image sources.'
-             'This option is persistent.'
-    )
-    parser.add_argument(
-        '--prod',
-        action='store_true',
-        help='Set default environment mode to production'
-             'This option is intended to install a production environment.'
-             'This option is persistent.'
-    )
+# PS ----------------------------------------------------------------------
 
-    parser.add_argument(
-        '--no-repos',
-        action='store_true',
-        help='Does not clone or pull repos when doing -i (install)')
 
-    parser.add_argument(
-        '-d',
-        action='store',
-        nargs=1,
-        dest='database',
-        help="Set default Database name."
-             "This option is persistent")
+@cli.command('ps')
+@click.option('-a', is_flag=True, help="Show all containers")
+def ps(a):
+    """List containers."""
+    if a:
+        click.echo('List all running containers')
+    else:
+        click.echo('List running containers')
 
-    parser.add_argument(
-        '-m',
-        action='append',
-        dest='module',
-        help="Module to update. Used with -u (update) i.e. -m sale for "
-             "updating sale module -m all for updating all modules. NOTE: if "
-             "you perform -u without -m it asumes all modules")
+# GROUP -----------------------------------------------------------------------
 
-    parser.add_argument(
-        '--nginx',
-        action='store_true',
-        help='Add nginx to installation: Used with -i creates nginx dir '
-             'with config file. '
-             'Used with -r starts an nginx container linked to odoo.'
-             'Used with -s stops nginx container. '
-             'If you want to add certificates review nginx.conf file located '
-             'in /odoo_ar/nginx/conf')
 
-    parser.add_argument(
-        '-Q',
-        action='store',
-        metavar='repo',
-        nargs=1,
-        dest='quality_assurance',
-        help="Perform QA running tests, argument are repository to test. "
-             "Need -d, -m and -c options Note: for the test to run the "
-             "database must be created with demo data and must have "
-             "admin user with password admin.")
+@cli.command('pull')
+def pull():
+    """Pull service images."""
+    click.echo('Pulling images...')
 
-    parser.add_argument(
-        '--backup-list',
-        action='store_true',
-        help="List all backup files available for restore")
+# VERSION ---------------------------------------------------------------------
 
-    parser.add_argument(
-        '--restore',
-        action='store_true',
-        help="Restores a backup. it uses last backup and restores to default "
-             "database. You can change the backup file to restore with -f "
-             "option and change database name -d option")
 
-    parser.add_argument(
-        '-f',
-        action='append',
-        dest='backup_file',
-        help="Filename to restore. Used with --restore. To get the name of "
-             "this file issue a --backup-list command."
-             "If ommited the newest file will be restored")
+@cli.command('version')
+def version():
+    """Show version information."""
+    click.echo('oe version %s' % __version__)
 
-    parser.add_argument(
-        '-H', '--server-help',
-        action='store_true',
-        help="Show odoo server help, it shows the help from the odoo image"
-             "declared in the cliente manifest")
+# UP --------------------------------------------------------------------------
 
-    parser.add_argument(
-        '-V',
-        '--version',
-        action='store_true',
-        help="Show version number and exit.")
 
-    args = parser.parse_args()
-    if args.debug:
-        OeConfig().save_environment('debug')
+@cli.command("up")
+@click.option('-c', help='client name')
+@click.option('-d', help='database name')
+@click.option('-e', type=click.Choice(['prod', 'debug']), help='environment')
+def up(c, d, e):
+    """Create and start containers."""
 
-    if args.prod:
-        OeConfig().save_environment('prod')
+# PGADMIN ---------------------------------------------------------------------
 
-    debug_option = OeConfig().get_environment() == 'debug'
+
+@cli.command('pgadmin')
+def pgadmin():
+    """Start pgadmin."""
+    click.echo('starting pgadmin')
+
+# INSTALL----------------------------------------------------------------------
+
+
+@cli.command('install')
+def install():
+    """Install Environment."""
+    click.echo('installing...')
+
+# HELP-------------------------------------------------------------------------
+
+
+@cli.group('help')
+def help():
+    """Get help on a command."""
+
+
+def _show_help(command):
+    try:
+        data_dir = os.path.join(os.path.dirname(__file__))
+        with open(data_dir + '/doc/%s.hlp' % command, 'r') as f:
+            help = f.read()
+        click.echo_via_pager(help)
+    except FileNotFoundError as e:
+        click.echo(e)
+
+
+@help.command('up')
+def _help_up():
+    _show_help('up')
+
+
+@help.command('down')
+def _help_down():
+    _show_help('down')
+
+
+@help.command('ps')
+def _help_ps():
+    _show_help('ps')
+
+
+@help.command('backup')
+def _help_backup():
+    _show_help('backup')
+
+
+@help.command('restore')
+def _help_restore():
+    _show_help('restore')
+
+
+@help.command('config')
+def _help_config():
+    _show_help('config')
+
+# DOWN ------------------------------------------------------------------------
+
+
+@cli.command("down")
+def down():
+    """Stop and remove containers, networks, images, and volumes."""
+    click.echo('System is going down...')
+
+# DATABASE --------------------------------------------------------------------
+
+
+@cli.group('db')
+def db():
+    """Database operations."""
+
+
+@db.command('backup')
+@click.option('-c', help='client name')
+@click.option('-d', help='database name')
+@click.option('-e', type=click.Choice(['prod', 'debug']), help='environment')
+def _backup_database(c, d, e):
+    """Backup current database to default location."""
+    click.echo('Backing up database...')
+
+
+@db.command('restore')
+@click.option('-f', help='File to restore / latest file if ommited.')
+@click.option('--prod', is_flag=True,
+              help='Restore from production / local if ommited.')
+@click.option('--no-deactivate', is_flag=True,
+              help='Do not deactivate database.')
+def _restore_database(f, prod, no_deactivate):
+    """Restore backup from default location / production location."""
+    click.echo('Restoring database from local...')
+
+
+@db.command('list')
+@click.option('--prod', is_flag=True,
+              help='List from production / local if ommited.')
+def _list_database(prod):
+    """List backup files from default location / production location."""
+    click.echo('Listing Restoring database from local...')
     options = {
-        'verbose': args.verbose,
-        'debug': debug_option,
-        'no-repos': args.no_repos,
-        'nginx': args.nginx,
-        'backup_file': args.backup_file,
+        'verbose': False,
+        'debug': False,
+        'no-repos': False,
+        'nginx': False,
+        'backup_file': 'args.backup_file',
     }
-    commands = []
 
-    if args.server_help:
-        client_name = get_param(args, 'client')
-        commands += OdooEnv(options).server_help(client_name)
-
-    if args.backup_list:
-        client_name = get_param(args, 'client')
-        commands += OdooEnv(options).backup_list(client_name)
-
-    if args.restore:
-        client_name = get_param(args, 'client')
-        database = get_param(args, 'database')
-        backup_file = get_param(args, 'backup_file')
-        deactivate = get_param(args, 'deactivate')
-        commands += OdooEnv(options).restore(client_name,
-                                             database,
-                                             backup_file,
-                                             deactivate)
-
-    if args.install:
-        client_name = get_param(args, 'client')
-        commands += OdooEnv(options).install(client_name)
-
-    if args.write_config:
-        client_name = get_param(args, 'client')
-        commands += OdooEnv(options).write_config(client_name)
-
-    if args.pull_images:
-        client_name = get_param(args, 'client')
-        commands += OdooEnv(options).pull_images(client_name)
-
-    if args.stop_env:
-        client_name = get_param(args, 'client')
-        commands += OdooEnv(options).stop_environment(client_name)
-
-    if args.run_env:
-        client_name = get_param(args, 'client')
-        commands += OdooEnv(options).run_environment(client_name)
-
-    if args.stop_cli:
-        client_name = get_param(args, 'client')
-        commands += OdooEnv(options).stop_client(client_name)
-
-    if args.run_cli:
-        client_name = get_param(args, 'client')
-        commands += OdooEnv(options).run_client(client_name)
-
-    if args.update:
-        client_name = get_param(args, 'client')
-        database = get_param(args, 'database')
-        modules = get_param(args, 'module')
-        commands += OdooEnv(options).update(client_name, database, modules)
-
-    if args.quality_assurance:
-        client_name = get_param(args, 'client')
-        database = get_param(args, 'database')
-        commands += OdooEnv(options).qa(client_name, database,
-                                        args.quality_assurance[0])
-    if args.version:
-        Msg().inf('oe version %s' % __version__)
-        exit()
-
-    # Verificar la version del script en pypi
-    conf = OeConfig()
-    conf.check_version()
-
-    # #####################################################################
-    # ejecutar comandos
-    # ######################################################################
-    for command in commands:
-        if command and command.check():
-            Msg().inf(command.usr_msg)
-            command.execute()
-
-
-if __name__ == '__main__':
-    main()
+    client_name = get_param('args', 'client')
+    command = OdooEnv(options).backup_list(client_name)
+    if command and command.check():
+        Msg().inf(command.usr_msg)
+        command.execute()

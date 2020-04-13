@@ -1,0 +1,6 @@
+client: makeover
+clients:
+- vhing: /odoo_ar/odoo-11.0/vhing/sources/cl-vhing/vhing_default
+- makeover: /odoo_ar/odoo-8.0/makeover/sources_today/cursos/makeover_default
+environment: debug
+last_version_check: '2020-04-11'

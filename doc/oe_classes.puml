@@ -1,8 +1,21 @@
-@startuml
+@startuml grafico
 
-class Client
-class OdooEnv
-class Command
+class Click {
+    interfase y help
+}
+class Client {
+    leer el manifiesto y proveer los datos
+}
+class OdooEnv {
+    inteligencia de negocio
+}
+class Command {
+    metaclase de comandos
+}
+class OeConfig {
+    persiste la configuracion
+}
+
 class CreateGitignore
 class MakedirCommand
 class ExtractSourcesCommand
@@ -11,6 +24,15 @@ class PullRepo
 class PullImage
 class CreateNginxTemplate
 class MessageOnly
+class Image
+class Repo
+
+Client --o Image
+Client --o Repo
+Click --o OdooEnv
+OdooEnv --o Command
+Command -r-o Client
+Command --o OeConfig
 
 Command <|--- CreateGitignore
 Command <|--- MakedirCommand

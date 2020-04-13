@@ -1,0 +1,11 @@
+1- Crear un proyecto nuevo y armar el esqueleto
+2- empezar a crear casos de uso y ver si el uml lo soporta
+    a. help
+    b. config
+    c. listar arhivos de backup
+    d. levantar ambiente
+    e. bajar ambiente
+    e. reiniciar ambiente
+    f. instalar ambiente
+    g. restaurar base de datos
+

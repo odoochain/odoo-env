@@ -8,7 +8,7 @@
             "name": "Debug oe",
             "type": "python",
             "request": "launch",
-            //"program": "/home/jobiols/git-repos/odoo-env/odoo_env/oe.py",
+            // "program": "/home/jobiols/git-repos/odoo-env/odoo_env/oe.py",
             "pythonPath": "/usr/bin/python3",
             //"console": "integratedTerminal",
             "args": ["-i","-c","test11","--debug"],

@@ -43,8 +43,8 @@ class Client(object):
                 msg.err('Can not find client {} in current dir'.format(name))
 
             msg.inf('Client found!')
-            msg.inf('Name {}\nversion {}\n'.format(manifest.get('name'),
-                                                   manifest.get('version')))
+            msg.inf('Name %s\nversion %s\n' % (manifest.get('name'),
+                                               manifest.get('version')))
 
         self.check_common(manifest)
 
@@ -114,7 +114,7 @@ class Client(object):
             msg.err('You intend to install client %s but in manifest, '
                     'the name is %s' % (self._name, manifest.get('name')))
 
-        # Tomar los datos para el odoo.conf
+        # Tomar los datos para odoo.conf
         self.config = manifest.get('config', False)
 
     def get_manifest_from_struct(self, path):
@@ -265,3 +265,7 @@ class Client(object):
         """ /odoo_ar/nginx/
         """
         return '%snginx/' % BASE_DIR
+
+    @property
+    def debug(self):
+        return self._parent.debug

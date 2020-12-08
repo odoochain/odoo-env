@@ -139,37 +139,14 @@ class OdooEnv(object):
         return ret
 
     def write_config(self, client_name):
-        """ Escribe el config file
+        """ Sobreescribe el config con los datos que vienen en el manifiesto
         """
         self._client = Client(self, client_name)
         ret = []
-        client = self._client
-        config = client.config if client.config else []
-
-        # ver si me setearon los workers
-        workers_in_list = list(filter(lambda x: x.find('workers') >= 0, config))
-        threads_in_list = list(filter(lambda x: x.find('max_cron_threads') >= 0, config))
-        if not workers_in_list:
-            # if no workers defined in manifest, calculate workers
-            CPUs = mp.cpu_count()
-
-            # You should use 2 worker threads + 1 cron thread per available CPU,
-            # and 1 CPU per 10 concurent users. Make sure you tune the memory
-            # limits and cpu limits in your configuration file.
-            work = CPUs * 2 if not self.debug else 0
-            config.append('workers = %s' % work)
-            config.append('max_cron_threads = %s' % CPUs)
-
-        # sobreescribir data_dir
-        data_dir_in_list = list(filter(lambda x: x.find('data_dir') >= 0, config))
-        if data_dir_in_list:
-            config.remove(data_dir_in_list[0])
-        config.append("data_dir = %s" % IN_DATA)
-
         if self._client.numeric_ver not in WRITE_CONFIG_OLD_MODE:
             cmd = WriteConfigFile(
                 self,
-                args={'config': config, 'client': client},
+                args={'client': self._client},
                 usr_msg='Writing config file')
             ret.append(cmd)
         else:
@@ -564,6 +541,8 @@ class OdooEnv(object):
         return ret
 
     def set_config_environment(self):
+        """ Deprecated
+        """
         command = '-e SERVER_WIDE_MODULES=web,web_kanban,server_mode,' \
                   'database_tools '
 

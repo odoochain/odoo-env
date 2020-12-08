@@ -1,6 +1,7 @@
 
 import os
 from datetime import datetime
+import json
 import yaml
 import tornado
 import tornado.httpclient
@@ -8,7 +9,6 @@ import tornado.options
 import tornado.process
 import tornado.web
 import tornado.websocket
-import json
 from odoo_env.__init__ import __version__
 from odoo_env.messages import Msg
 

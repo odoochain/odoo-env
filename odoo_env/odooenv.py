@@ -148,6 +148,7 @@ class OdooEnv(object):
 
         # ver si me setearon los workers
         workers_in_list = list(filter(lambda x: x.find('workers') >= 0, config))
+        threads_in_list = list(filter(lambda x: x.find('max_cron_threads') >= 0, config))
         if not workers_in_list:
             # if no workers defined in manifest, calculate workers
             CPUs = mp.cpu_count()
@@ -155,8 +156,9 @@ class OdooEnv(object):
             # You should use 2 worker threads + 1 cron thread per available CPU,
             # and 1 CPU per 10 concurent users. Make sure you tune the memory
             # limits and cpu limits in your configuration file.
-            config['workers'] = CPUs * 2 if not self.debug else 0
-            config['max_cron_threads'] = CPUs
+            work = CPUs * 2 if not self.debug else 0
+            config.append('workers = %s' % work)
+            config.append('max_cron_threads = %s' % CPUs)
 
         # sobreescribir data_dir
         data_dir_in_list = list(filter(lambda x: x.find('data_dir') >= 0, config))
@@ -636,7 +638,7 @@ class OdooEnv(object):
         # si tenemos nginx o si estamos escribiendo la configuracion no hay
         # que exponer los puertos.
         if not (self.nginx or write_config):
-            command += '-p %d:8069 ' % self.client.port
+            command += '-p %s:8069 ' % self.client.port
             command += '-p 8072:8072 '
 
         command += self._add_normal_mountings()

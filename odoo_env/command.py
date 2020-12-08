@@ -1,3 +1,4 @@
+import configparser
 import os
 import subprocess
 from odoo_env.__init__ import __version__
@@ -89,6 +90,9 @@ class CreateGitignore(Command):
             for value in values:
                 _f.write(value)
 
+    @staticmethod
+    def check_args():
+        return True
 
 class MakedirCommand(Command):
     def check_args(self):
@@ -153,7 +157,6 @@ class WriteConfigFile(Command):
         repos = ['/opt/odoo/custom-addons/' + x for x in repos]
 
         # leer el password del archivo de configuracion para no pisarlo
-        import configparser
         config_parser = configparser.RawConfigParser()
         try:
             config_parser.read(client.config_file)

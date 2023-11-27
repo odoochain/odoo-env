@@ -29,7 +29,7 @@ pipx --version
 #pip -V
 
 # install sd and oe
-pipx install ensurepath
+# pipx install ensurepath
 pipx install odoo-env
 
 # install docker en desarrollo

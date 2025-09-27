@@ -1,4 +1,5 @@
-""" Crear base de datos de con datos demo"""
+"""Crear base de datos de con datos demo"""
+
 import os
 import subprocess
 
@@ -35,7 +36,7 @@ def create_database(_oe, client_name):
         create_backup_db(cli)
 
     if not os.path.exists(db_bkp_file):
-        Msg().inf("I can't find the backup creating databas")
+        Msg().inf("I can't find the backup creating database")
         create_backup_db(cli)
 
     restore_database(cli)

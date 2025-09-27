@@ -6,11 +6,10 @@
     "configurations": [
         {
             "name": "Debug oe myproject",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
-            "args": ["-i","git@github.com:jobiols/cl-test.git","-b","16.0",],
-//"args": ["-h"],
-            "python": "/usr/bin/python3",
+            "python": "/odoo/vs_env/bin/python3.12",
+            "args": ["-Q","utest","-m","module_1","-v"],
             "justMyCode": true,
             "module": "odoo_env.oe"
         }

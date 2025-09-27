@@ -4,10 +4,6 @@ from datetime import datetime
 
 import tornado
 import tornado.httpclient
-import tornado.options
-import tornado.process
-import tornado.web
-import tornado.websocket
 import yaml
 
 from odoo_env.__init__ import __version__
@@ -108,7 +104,7 @@ class OeConfig(Singleton):
         self.save_config_data(config)
 
     def check_version(self):
-        """Chequea si la vcersion de odoo-env es la última"""
+        """Chequea si la version de odoo-env es la última"""
 
         config = self.get_config_data()
         dt_today = datetime.today()
@@ -142,7 +138,7 @@ class OeConfig(Singleton):
                 if version != __version__:
                     Msg().warn(
                         f"BE CAREFUL, you are using version {__version__} of odoo-env "
-                        "however version {version} is already available."
+                        f"however version {version} is already available."
                     )
                     Msg().warn(
                         'You should update using "pipx upgrade odoo-env" or "pip '

@@ -7,6 +7,7 @@ import sys
 from odoo_env.__init__ import __version__
 from odoo_env.config import OeConfig
 from odoo_env.create_database import create_database
+from odoo_env.deploy_keys import deploy_keys
 from odoo_env.messages import Msg
 from odoo_env.odooenv import OdooEnv
 from odoo_env.options import get_param
@@ -23,20 +24,12 @@ Odoo Environment Manager v{__version__} - by jeo Software <jorge.obiols@gmail.co
     parser.add_argument(
         "-i",
         "--install",
-        nargs="?",
-        const=False,
-        #        action="store_true",
-        help="-i [git-project-url] will download the project and install the directory "
-        "tree with all the necessary elements to run the installation locally. "
-        "-i [git-project-url] -b 16.0 same as before but using the 16.0 branch; "
-        "if -b is omitted, it will use the default branch. "
-        "-i without any parameters will update all related repositories.",
-    )
-
-    parser.add_argument(
-        "-b",
-        "--branch",
-        help="Used in conjunction con -i to set a branch different from default",
+        action="store_true",
+        help="The first time it runs, it creates the directory structure and "
+        "clones all repositories declared in the project. If run again, it "
+        "updates the repositories. Use together with --extract-sources to copy "
+        "the sources from the Odoo image to the host, which is essential for "
+        "working in debug mode.",
     )
 
     parser.add_argument(
@@ -106,7 +99,7 @@ Odoo Environment Manager v{__version__} - by jeo Software <jorge.obiols@gmail.co
     parser.add_argument(
         "--extract-sources",
         action="store_true",
-        help="Used in conjuntion with -i to extract sources to host from images",
+        help="Extract sources from images on -i",
     )
 
     parser.add_argument(
@@ -120,7 +113,6 @@ Odoo Environment Manager v{__version__} - by jeo Software <jorge.obiols@gmail.co
         "image sources. "
         "This option is persistent. ",
     )
-
     parser.add_argument(
         "--prod",
         action="store_true",
@@ -129,14 +121,12 @@ Odoo Environment Manager v{__version__} - by jeo Software <jorge.obiols@gmail.co
         "This option is persistent. "
         "Warning this option is deprecated in favor of docker-compose installations",
     )
-
     parser.add_argument(
         "--from-prod",
         action="store_true",
         help="Restore backup from production server. Use with --restore. "
         "it needs the option 'prod_server': 'user@vps-alias' in the manifest",
     )
-
     parser.add_argument(
         "--no-repos",
         action="store_true",
